@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AConnect</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #004080;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    nav {
+      background: #003366;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px 0;
+      flex-wrap: wrap;
+    }
+    nav a, nav button {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 4px;
+      transition: background 0.3s ease;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    nav a:hover, nav button:hover {
+      background: #ffcc00;
+      color: #003366;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .filter-section input {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      width: 150px;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .product {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 220px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .product img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .product h3 {
+      margin: 10px 0 5px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .product p {
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+      flex-grow: 1;
+    }
+    .product .price {
+      font-weight: bold;
+      margin: 10px 0;
+      color: #004080;
+    }
+    .product button {
+      background: #004080;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .product button:hover {
+      background: #003366;
+    }
+    #cart {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #004080;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      z-index: 1000;
+    }
+    #cart-count {
+      background: #ffcc00;
+      color: #004080;
+      border-radius: 50%;
+      padding: 2px 8px;
+      margin-left: 8px;
+      font-weight: bold;
+    }
+    #cart-modal, #login-modal, #payment-modal {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 320px;
+      max-height: 450px;
+      overflow-y: auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      padding: 15px;
+      z-index: 1001;
+    }
+    #cart-modal h2, #login-modal h2, #payment-modal h2 {
+      margin-top: 0;
+      color: #004080;
+      text-align: center;
+    }
+    #cart-items, #payment-info {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #cart-items li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    #cart-items li button {
+      background: #cc0000;
+      border: none;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+    #checkout-btn, #login-btn, #payment-submit-btn {
+      background: #ffcc00;
+      color: #004080;
+      border: none;
+      width: 100%;
+      padding: 10px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+    #checkout-btn:hover, #login-btn:hover, #payment-submit-btn:hover {
+      background: #e6b800;
+    }
+    #close-cart, #close-login, #close-payment {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      float: right;
+      cursor: pointer;
+      color: #004080;
+      font-weight: bold;
+    }
+    #login-form, #payment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #login-form input, #payment-form input {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    #user-info {
+      color: white;
+      margin-left: 15px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>AConnect</header>
+  <nav>
+    <a href="#products">Products</a>
+    <button id="login-toggle-btn">Login</button>
+    <button id="logout-btn" style="display:none;">Logout</button>
+    <a href="#cart-modal" id="open-cart">Cart <span id="cart-count">0</span></a>
+    <span id="user-info" style="display:none;"></span>
+  </nav>
+  <div class="container">
+    <section class="filter-section">
+      <input type="text" id="filter-name" placeholder="Filter by name" />
+      <input type="number" id="filter-min-price" placeholder="Min price" min="0" />
+      <input type="number" id="filter-max-price" placeholder="Max price" min="0" />
+      <button id="filter-btn">Filter</button>
+      <button id="clear-filter-btn">Clear</button>
+    </section>
+    <section id="products" class="products"></section>
+  </div>
+
+  <div id="cart-modal" aria-hidden="true" role="dialog" aria-labelledby="cart-title">
+    <button id="close-cart" aria-label="Close cart">&times;</button>
+    <h2 id="cart-title">Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <button id="checkout-btn">Checkout</button>
+  </div>
+
+  <div id="login-modal" aria-hidden="true" role="dialog" aria-labelledby="login-title">
+    <button id="close-login" aria-label="Close login">&times;</button>
+    <h2 id="login-title">User Login</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit" id="login-btn">Login</button>
+    </form>
+  </div>
+
+  <div id="payment-modal" aria-hidden="true" role="dialog" aria-labelledby="payment-title">
+    <button id="close-payment" aria-label="Close payment">&times;</button>
+    <h2 id="payment-title">Payment Information</h2>
+    <form id="payment-form">
+      <input type="text" id="card-name" placeholder="Name on Card" required />
+      <input type="text" id="card-number" placeholder="Card Number" required pattern="\\d{16}" maxlength="16" />
+      <input type="text" id="expiry" placeholder="Expiry MM/YY" required pattern="(0[1-9]|1[0-2])\\/\\d{2}" maxlength="5" />
+      <input type="text" id="cvv" placeholder="CVV" required pattern="\\d{3}" maxlength="3" />
+      <button type="submit" id="payment-submit-btn">Submit Payment</button>
+    </form>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Wireless Headphones", description: "High quality wireless headphones with noise cancellation.", price: 99.99, image: "https://images.unsplash.com/photo-1658927420987-488ade098001?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { id: 2, name: "Smart Watch", description: "Stay connected and track your fitness with this smart watch.", price: 149.99, image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { id: 3, name: "Bluetooth Speaker", description: "Portable Bluetooth speaker with excellent sound quality.", price: 59.99, image: "https://images.unsplash.com/photo-1589256469067-ea99122bbdc4?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+      { id: 4, name: "DSLR Camera", description: "Capture stunning photos with this DSLR camera.", price: 499.99, image: "https://images.unsplash.com/photo-1616423640778-28d1b53229bd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let loggedInUser = localStorage.getItem('loggedInUser') || null;
+
+    const productsContainer = document.getElementById('products');
+    const cartCount = document.getElementById('cart-count');
+    const cartModal = document.getElementById('cart-modal');
+    const cartItemsList = document.getElementById('cart-items');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    const loginToggleBtn = document.getElementById('login-toggle-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const loginModal = document.getElementById('login-modal');
+    const closeLoginBtn = document.getElementById('close-login');
+    const loginForm = document.getElementById('login-form');
+    const userInfo = document.getElementById('user-info');
+
+    const filterNameInput = document.getElementById('filter-name');
+    const filterMinPriceInput = document.getElementById('filter-min-price');
+    const filterMaxPriceInput = document.getElementById('filter-max-price');
+    const filterBtn = document.getElementById('filter-btn');
+    const clearFilterBtn = document.getElementById('clear-filter-btn');
+
+    const paymentModal = document.getElementById('payment-modal');
+    const closePaymentBtn = document.getElementById('close-payment');
+    const paymentForm = document.getElementById('payment-form');
+
+    function renderProducts(filteredProducts = null) {
+      const list = filteredProducts || products;
+      productsContainer.innerHTML = '';
+      list.forEach(product => {
+        const productEl = document.createElement('div');
+        productEl.className = 'product';
+        productEl.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <div class="price">$${product.price.toFixed(2)}</div>
+          <button data-id="${product.id}">Add to Cart</button>
+        `;
+        productsContainer.appendChild(productEl);
+      });
+    }
+
+    function updateCartCount() {
+      cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    function renderCart() {
+      cartItemsList.innerHTML = '';
+      if (cart.length === 0) {
+        cartItemsList.innerHTML = '<li>Your cart is empty.</li>';
+        checkoutBtn.disabled = true;
+        return;
+      }
+      checkoutBtn.disabled = false;
+      cart.forEach(item => {
+        const product = products.find(p => p.id === item.id);
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span>${product.name} x ${item.quantity}</span>
+          <button data-id="${item.id}">Remove</button>
+        `;
+        cartItemsList.appendChild(li);
+      });
+    }
+
+    function addToCart(id) {
+      if (!loggedInUser) {
+        alert('Please login to add products to cart.');
+        return;
+      }
+      const existingItem = cart.find(item => item.id === id);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({ id, quantity: 1 });
+      }
+      saveCart();
+      updateCartCount();
+      renderCart();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      saveCart();
+      updateCartCount();
+      renderCart();
+    }
+
+    productsContainer.addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON') {
+        const id = parseInt(e.target.getAttribute('data-id'));
+        addToCart(id);
+      }
+    });
+
+    cartItemsList.addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON') {
+        const id = parseInt(e.target.getAttribute('data-id'));
+        removeFromCart(id);
+      }
+    });
+
+    openCartBtn.addEventListener('click', e => {
+      e.preventDefault();
+      cartModal.style.display = 'block';
+      cartModal.setAttribute('aria-hidden', 'false');
+    });
+
+    closeCartBtn.addEventListener('click', () => {
+      cartModal.style.display = 'none';
+      cartModal.setAttribute('aria-hidden', 'true');
+    });
+
+    loginToggleBtn.addEventListener('click', () => {
+      loginModal.style.display = 'block';
+      loginModal.setAttribute('aria-hidden', 'false');
+    });
+
+    closeLoginBtn.addEventListener('click', () => {
+      loginModal.style.display = 'none';
+      loginModal.setAttribute('aria-hidden', 'true');
+    });
+
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      // Simple hardcoded user for demo
+      if (username === 'user' && password === 'password') {
+        loggedInUser = username;
+        localStorage.setItem('loggedInUser', username);
+        alert('Login successful');
+        loginModal.style.display = 'none';
+        loginModal.setAttribute('aria-hidden', 'true');
+        updateUserUI();
+      } else {
+        alert('Invalid username or password');
+      }
+      loginForm.reset();
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      loggedInUser = null;
+      localStorage.removeItem('loggedInUser');
+      alert('Logged out');
+      updateUserUI();
+    });
+
+    function updateUserUI() {
+      if (loggedInUser) {
+        loginToggleBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        userInfo.style.display = 'inline-block';
+        userInfo.textContent = `Welcome, ${loggedInUser}`;
+      } else {
+        loginToggleBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        userInfo.style.display = 'none';
+        userInfo.textContent = '';
+      }
+    }
+
+    filterBtn.addEventListener('click', () => {
+      const nameFilter = filterNameInput.value.trim().toLowerCase();
+      const minPrice = parseFloat(filterMinPriceInput.value);
+      const maxPrice = parseFloat(filterMaxPriceInput.value);
+      const filtered = products.filter(p => {
+        const matchesName = p.name.toLowerCase().includes(nameFilter);
+        const matchesMin = isNaN(minPrice) ? true : p.price >= minPrice;
+        const matchesMax = isNaN(maxPrice) ? true : p.price <= maxPrice;
+        return matchesName && matchesMin && matchesMax;
+      });
+      renderProducts(filtered);
+    });
+
+    clearFilterBtn.addEventListener('click', () => {
+      filterNameInput.value = '';
+      filterMinPriceInput.value = '';
+      filterMaxPriceInput.value = '';
+      renderProducts();
+    });
+
+    checkoutBtn.addEventListener('click', () => {
+      if (!loggedInUser) {
+        alert('Please login to proceed to checkout.');
+        return;
+      }
+      if (cart.length === 0) {
+        alert('Your cart is empty. Add some products before checkout.');
+        return;
+      }
+      cartModal.style.display = 'none';
+      cartModal.setAttribute('aria-hidden', 'true');
+      paymentModal.style.display = 'block';
+      paymentModal.setAttribute('aria-hidden', 'false');
+    });
+
+    closePaymentBtn.addEventListener('click', () => {
+      paymentModal.style.display = 'none';
+      paymentModal.setAttribute('aria-hidden', 'true');
+    });
+
+    paymentForm.addEventListener('submit', e => {
+      e.preventDefault();
+      // Simple validation already done by input patterns
+      alert('Payment successful! Thank you for your purchase.');
+      cart = [];
+      saveCart();
+      updateCartCount();
+      renderCart();
+      paymentModal.style.display = 'none';
+      paymentModal.setAttribute('aria-hidden', 'true');
+    });
+
+    // Initial render and UI update
+    renderProducts();
+    updateCartCount();
+    renderCart();
+    updateUserUI();
+  </script>
+</body>
+</html>
