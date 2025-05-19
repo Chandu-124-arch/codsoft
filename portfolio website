@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personal Portfolio</title>
+    <style>
+        /* Reset default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #004080;
+            color: white;
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #cce0ff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            margin-bottom: 60px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        section h2 {
+            color: #004080;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #004080;
+            padding-bottom: 8px;
+        }
+
+        /* About Section */
+        .about {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .about img {
+            width: 200px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .about p {
+            flex: 1;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* Skills Section */
+        .skills ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .skills ul li {
+            background-color: #004080;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .project {
+            background-color: #e6f0ff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 15px 20px;
+            flex: 1;
+        }
+
+        .project-content h3 {
+            margin-bottom: 10px;
+            color: #004080;
+        }
+
+        .project-content p {
+            color: #333;
+            font-size: 1rem;
+        }
+
+        /* Resume Section */
+        .resume a {
+            display: inline-block;
+            background-color: #004080;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .resume a:hover {
+            background-color: #003366;
+        }
+
+        /* Contact Section */
+        .contact p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #00264d;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .about img {
+                margin: 0 auto 20px;
+            }
+
+            .skills ul {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Durga Chandrika</h1>
+        <p>Web Developer | Designer | Creator</p>
+    </header>
+
+    <div class="container">
+        <section class="about" id="about">
+            <h2>About Me</h2>
+            <p>Hello! I'm Durga Chandrika, a passionate web developer with experience in creating beautiful and functional websites. I specialize in HTML, CSS, and JavaScript, and I love turning ideas into reality.</p>
+        </section>
+
+        <section class="skills" id="skills">
+            <h2>Skills</h2>
+            <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+        </section>
+        <section class="projects" id="projects">
+            <h2>Projects</h2>
+            <div class="project">
+                <div class="project-content">
+                    <h3>web based Calculator</h3>
+                    <p>A web based Calculator built with HTML, CSS, and JavaScript showcasing modern design principles which can perform basic calculations.</p>
+                </div>
+            </div>
+            <div class="project">
+                <div class="project-content">
+                    <h3>Landing Page</h3>
+                    <p>An e-commerce platform prototype developed using React and Node.js for seamless user experience.</p>
+                </div>
+            </div>
+            <div class="project">
+                <div class="project-content">
+                    <h3>Portfolio website</h3>
+                    <p>A portfolio website designed to highlight creative work and professional skills.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="resume" id="resume">
+            <h2>Resume</h2>
+            <a href="resume.pdf" download>Download My Resume (PDF)</a>
+        </section>
+
+        <section class="contact" id="contact">
+            <h2>Contact</h2>
+            <p>Email: chandrikadurga4@gmail.com</p>
+            <p>Phone: +91 90323 82299</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 John Doe. All rights reserved.</p>
+        <p>
+            <a href="https://www.linkedin.com/in/durga-chandrika-a85725345/">LinkedIn</a> | 
+            <a href="https://github.com/chandrikadurga">GitHub</a> | 
+        </p>
+    </footer>
+</body>
+</html>
